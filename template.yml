@@ -1,0 +1,127 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: mini-httpd
+    name: mini-httpd
+  spec: {}
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: mini-httpd
+    name: mini-httpd
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: mini-httpd:latest
+    postCommit: {}
+    resources: {}
+    source:
+      git:
+        ref: master
+        uri: https://github.com/joncolby/mini-httpd.git
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: httpd:latest
+          namespace: myproject
+      type: Docker
+    triggers:
+    - github:
+        secret: DtuSPfNMnd7qose7cs0c
+      type: GitHub
+    - generic:
+        secret: 7gxQAmc-HzsnqmFcyiYI
+      type: Generic
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: mini-httpd
+    name: mini-httpd
+  spec:
+    replicas: 1
+    selector:
+      app: mini-httpd
+      deploymentconfig: mini-httpd
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: mini-httpd
+          deploymentconfig: mini-httpd
+      spec:
+        containers:
+        - image: mini-httpd:latest
+          name: mini-httpd
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - mini-httpd
+        from:
+          kind: ImageStreamTag
+          name: mini-httpd:latest
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: mini-httpd
+    name: mini-httpd
+  spec:
+    ports:
+    - name: 80-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: mini-httpd
+      deploymentconfig: mini-httpd
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}
