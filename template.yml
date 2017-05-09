@@ -43,10 +43,10 @@ items:
       type: Docker
     triggers:
     - github:
-        secret: DtuSPfNMnd7qose7cs0c
+        secret: s2iIWM7QJDUizZPInQQE
       type: GitHub
     - generic:
-        secret: 7gxQAmc-HzsnqmFcyiYI
+        secret: k6dW_OzWEI7IpeKtXX1e
       type: Generic
     - type: ConfigChange
     - imageChange: {}
@@ -82,7 +82,7 @@ items:
         - image: mini-httpd:latest
           name: mini-httpd
           ports:
-          - containerPort: 80
+          - containerPort: 8090
             protocol: TCP
           resources: {}
     test: false
@@ -114,10 +114,10 @@ items:
     name: mini-httpd
   spec:
     ports:
-    - name: 80-tcp
-      port: 80
+    - name: 8090-tcp
+      port: 8090
       protocol: TCP
-      targetPort: 80
+      targetPort: 8090
     selector:
       app: mini-httpd
       deploymentconfig: mini-httpd
