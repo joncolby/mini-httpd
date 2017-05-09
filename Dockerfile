@@ -1,5 +1,8 @@
 FROM httpd:latest
 
-WORKDIR /var/lib/mydocroot
+ENV DOCROOT /var/lib/mydocroot
+WORKDIR $DOCROOT
 
-COPY . /
+COPY . $DOCROOT/
+
+EXPOSE 8090
